@@ -1,4 +1,5 @@
 requests==2.31.0
-pandas==2.1.0
+numpy==1.26.4  # Фиксируем версию numpy
+pandas==2.1.0   # pandas зависит от numpy → фиксируем обе
 pytz==2024.1
 supabase==2.5.0
