@@ -3,6 +3,7 @@ name: HH Daily Update
 on:
   schedule:
     - cron: '1 21 * * *'  # 00:01 МСК = 21:01 UTC
+  workflow_dispatch:     # Позволяет запускать вручную
 
 jobs:
   fetch:
