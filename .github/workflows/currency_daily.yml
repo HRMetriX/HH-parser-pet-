@@ -1,0 +1,27 @@
+name: Currency Daily Update
+
+on:
+  schedule:
+    - cron: '1 21 * * *'  # 00:01 МСК = 21:01 UTC
+  workflow_dispatch:      # кнопка "Run workflow" для теста
+
+jobs:
+  update-currency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests xmltodict supabase
+
+      - name: Run currency update
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: python currency_upd.py
