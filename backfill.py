@@ -6,12 +6,14 @@ from supabase import create_client
 import os
 import supabase
 
+from utils_backfill import flatten_vacancy, extract_regions_and_cities_recursive, load_regions_and_cities_from_api, get_all_vacancies_for_params
+
 # Заголовок — обязательно с email!
 headers = {
     "User-Agent": "MemeWeather-HH-Pipeline/1.0 (oborisov.personal@gmail.com)"
 }
 
-def flatten_vacancy(v):
+''' def flatten_vacancy(v):
     flat = {}
 
     # Основные поля
@@ -52,7 +54,7 @@ def flatten_vacancy(v):
     flat["role_name"] = roles[0].get("name") if roles else None
     flat["role_id"] = roles[0].get("id") if roles else None
 
-    return flat
+    return flat 
 
 def extract_regions_and_cities_recursive(areas, regions_list, cities_list):
     """
@@ -116,7 +118,7 @@ def get_all_vacancies_for_params(city_id, search_text, date_from=None, date_to=N
         time.sleep(0.5)  # уважаем API
 
     print(f"✅ Всего собрано вакансий по area={city_id}, text='{search_text}', date_from={date_from}, date_to={date_to}: {len(all_vacancies)}")
-    return all_vacancies
+    return all_vacancies '''
 
 # === Основной код ===
 print("🔍 Загружаем список всех регионов и городов из API...")
