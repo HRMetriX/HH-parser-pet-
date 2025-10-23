@@ -3,6 +3,8 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta, timezone
 
+headers = {"User-Agent": "MemeWeather-HH-Pipeline/1.0 (oborisov.personal@gmail.com)"}
+
 def load_regions_and_cities_from_api():
     url = "https://api.hh.ru/areas/113"  # Исправлено: убраны пробелы
     response = requests.get(url, headers=headers)
