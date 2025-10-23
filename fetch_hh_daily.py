@@ -6,6 +6,9 @@ import os
 import pytz # pip install pytz
 import pandas as pd # pip install pandas
 
+
+from utils_daily import load_regions_and_cities_from_api, flatten_vacancy, get_vacancies_for_date
+
 # === Настройки ===
 headers = {"User-Agent": "MemeWeather-HH-Pipeline/1.0 (oborisov.personal@gmail.com)"}
 
@@ -16,7 +19,7 @@ supabase = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_KEY"])
 cMillioners = [1, 2, 1057, 3, 1130, 54, 1679, 139, 1321, 1438, 1586, 1420, 1249, 1844, 1317, 1511]
 
 # Получаем список регионов (как в backfill) - убраны лишние пробелы
-def load_regions_and_cities_from_api():
+''' def load_regions_and_cities_from_api():
     url = "https://api.hh.ru/areas/113"  # Исправлено: убраны пробелы
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
@@ -30,7 +33,7 @@ def load_regions_and_cities_from_api():
                 regions.append(area["id"])
                 extract_regions(area["areas"])
     extract_regions(data["areas"])
-    return regions
+    return regions '''
 
 all_regions = load_regions_and_cities_from_api()
 cMillioners_extended = list(set(cMillioners + all_regions))
@@ -41,7 +44,7 @@ yesterday = (datetime.now(moscow_tz) - timedelta(days=1)).strftime("%Y-%m-%d")
 print(f"Собираем вакансии за: {yesterday}")
 
 # === Функция сбора ===
-def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): # Добавлен search_text
+''' def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): # Добавлен search_text
     url = "https://api.hh.ru/vacancies"  # Исправлено: убраны пробелы
     params = {
         "text": search_text,
@@ -74,7 +77,7 @@ def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): #
     if len(all_vac) == 2000:
         print(f"⚠️  Возможен лимит 2000 вакансий для area_id={area_id}, date={date_str}, text={search_text}")
         
-    return all_vac
+    return all_vac '''
 
 # === Основной сбор ===
 all_vacancies = []
@@ -112,7 +115,7 @@ for search_text in search_texts:
 print(f"✅ Найдено {len(all_vacancies)} вакансий. Обработка...")
 
 # === Преобразование и загрузка ===
-def flatten_vacancy(v):
+''' def flatten_vacancy(v):
     flat = {}
     flat["id"] = int(v["id"])
     flat["name"] = v.get("name")
@@ -136,7 +139,7 @@ def flatten_vacancy(v):
     flat["area_id"] = v.get("area", {}).get("id")
     flat["employer_id"] = v.get("employer", {}).get("id")
     flat["role_id"] = roles[0].get("id") if roles else None
-    return flat
+    return flat '''
 
 records = [flatten_vacancy(v) for v in all_vacancies]
 
