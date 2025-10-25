@@ -19,17 +19,22 @@ def extract_cities_recursive(areas, parent_name=None):
         sub_areas = area.get("areas", [])
         
         if not sub_areas and lat is not None and lng is not None:
-            # Это город с координатами
+            # Специальная обработка для Москвы и СПб
+            if area_name == "Москва":
+                region_name = "ГФЗ Москва"
+            elif area_name == "Санкт-Петербург":
+                region_name = "ГФЗ Санкт-Петербург"
+            else:
+                region_name = parent_name
+            
             all_cities.append({
                 "area_name": area_name,
                 "lat": lat,
                 "lng": lng,
-                "region_name": parent_name
+                "region_name": region_name
             })
         elif sub_areas:
-            # Это регион — рекурсивно идём вглубь
             extract_cities_recursive(sub_areas, parent_name=area_name)
-
 # === Основной код ===
 print("🔍 Загружаем иерархию регионов и городов из hh.ru...")
 response = requests.get("https://api.hh.ru/areas/113")
