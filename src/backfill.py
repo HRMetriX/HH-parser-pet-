@@ -6,7 +6,7 @@ from supabase import create_client
 import os
 import supabase
 
-from utils_backfill import flatten_vacancy, extract_regions_and_cities_recursive, load_regions_and_cities_from_api, get_all_vacancies_for_params
+from utils.utils_backfill import flatten_vacancy, extract_regions_and_cities_recursive, load_regions_and_cities_from_api, get_all_vacancies_for_params
 
 # Заголовок — обязательно с email!
 headers = {
