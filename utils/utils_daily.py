@@ -22,8 +22,8 @@ def load_regions_and_cities_from_api():
     return regions
 
 # === Функция сбора ===
-def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): # Добавлен search_text
-    url = "https://api.hh.ru/vacancies"  # Исправлено: убраны пробелы
+def get_vacancies_for_date(area_id, date_str, search_text="аналитик"):
+    url = "https://api.hh.ru/vacancies"
     params = {
         "text": search_text,
         "area": area_id,
@@ -33,28 +33,36 @@ def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): #
         "per_page": 100,
         "page": 0
     }
+
+    # Настройка повторных попыток
+    session = requests.Session()
+    retries = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"]
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retries))
+
     all_vac = []
     page = 0
-    while page < 20:
+    while page < 5:  # уменьшил до 5 страниц (500 вакансий — более чем достаточно за день)
         params["page"] = page
-        # print(f"    Запрос страницы {page} для area_id={area_id}, date={date_str}, text={search_text}...") # Убрано
-        resp = requests.get(url, headers=headers, params=params)
-        if resp.status_code != 200:
-            print(f"    Ошибка при запросе к area_id={area_id}, date={date_str}, text={search_text}, page={page}: {resp.status_code}") # Оставлено для отладки ошибок API
-            break
-        data = resp.json()
-        if not data["items"]:
-            # print(f"    Нет вакансий на странице {page} для area_id={area_id}, date={date_str}, text={search_text}.") # Убрано
-            break
-        all_vac.extend(data["items"])
-        # print(f"    Получено {len(data['items'])} вакансий на странице {page} для area_id={area_id}, date={date_str}, text={search_text}. Всего накоплено: {len(all_vac)}") # Убрано
-        page += 1
-        time.sleep(0.5)
-    
-    # Проверка на лимит (опционально)
-    if len(all_vac) == 2000:
-        print(f"⚠️  Возможен лимит 2000 вакансий для area_id={area_id}, date={date_str}, text={search_text}")
-        
+        try:
+            resp = session.get(url, headers=headers, params=params, timeout=10)
+            if resp.status_code != 200:
+                print(f"⚠️ Ошибка {resp.status_code} для area_id={area_id}, page={page}")
+                break
+            data = resp.json()
+            if not data.get("items"):
+                break
+            all_vac.extend(data["items"])
+            page += 1
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"❌ Ошибка при запросе: {e}. Пропускаем area_id={area_id}")
+            break  # не зацикливаемся — переходим к следующему региону
+
     return all_vac
 
 # === Преобразование и загрузка ===
