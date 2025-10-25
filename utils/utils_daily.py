@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 import time
 from datetime import datetime, timedelta, timezone
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 headers = {"User-Agent": "MemeWeather-HH-Pipeline/1.0 (oborisov.personal@gmail.com)"}
 
