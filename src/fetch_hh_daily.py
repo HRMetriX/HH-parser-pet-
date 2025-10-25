@@ -5,35 +5,9 @@ from supabase import create_client
 import os
 import pytz # pip install pytz
 import pandas as pd # pip install pandas
-
-###
-###
-###
-
 import sys
-import os
-
-print("=== DEBUG INFO ===")
-print(f"Current directory: {os.getcwd()}")
-print(f"Script location: {os.path.dirname(__file__)}")
-print(f"Python path: {sys.path}")
-
-# Проверяем существование папки utils
-utils_path = os.path.join(os.path.dirname(__file__), '..', 'utils')
-print(f"Utils path exists: {os.path.exists(utils_path)}")
-print(f"Utils path: {utils_path}")
-
-if os.path.exists(utils_path):
-    print("Files in utils:", os.listdir(utils_path))
-
-print("==================")
-
 # Добавляем путь
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-###
-###
-###
 
 from utils.utils_daily import load_regions_and_cities_from_api, flatten_vacancy, get_vacancies_for_date
 
