@@ -49,7 +49,7 @@ def get_vacancies_for_date(area_id, date_str, search_text="аналитик"): #
         all_vac.extend(data["items"])
         # print(f"    Получено {len(data['items'])} вакансий на странице {page} для area_id={area_id}, date={date_str}, text={search_text}. Всего накоплено: {len(all_vac)}") # Убрано
         page += 1
-        time.sleep(0.3)
+        time.sleep(0.5)
     
     # Проверка на лимит (опционально)
     if len(all_vac) == 2000:
