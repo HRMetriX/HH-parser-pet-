@@ -7,7 +7,7 @@ import pytz # pip install pytz
 import pandas as pd # pip install pandas
 
 
-from utils_daily import load_regions_and_cities_from_api, flatten_vacancy, get_vacancies_for_date
+from utils.utils_daily import load_regions_and_cities_from_api, flatten_vacancy, get_vacancies_for_date
 
 # === Настройки ===
 headers = {"User-Agent": "MemeWeather-HH-Pipeline/1.0 (oborisov.personal@gmail.com)"}
